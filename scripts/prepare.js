@@ -198,7 +198,7 @@ async function updateOptionalDependencies(packages) {
 }
 
 async function main() {
-  let uvVersion = "0.6.14";
+  let uvVersion = INFO.version;
   let downloadDir = path.resolve(import.meta.dirname, "..", ".tmp");
   await fs.promises.mkdir(downloadDir, { recursive: true });
 
