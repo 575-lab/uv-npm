@@ -2,10 +2,22 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Build and pack everything without publishing to npm"
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # NPM_TOKEN is stored as an *environment* secret, so the job has to opt into
+    # the environment or secrets.NPM_TOKEN silently resolves to an empty string.
+    # This name must also match the "Environment" field of the npm trusted
+    # publisher: declaring an environment adds it to the OIDC token's subject
+    # claim, and npm rejects the token if the two disagree.
+    environment: npm
     permissions:
       # Required for npm trusted publishing (OIDC). Without this the runner
       # cannot mint an OIDC token and pnpm falls back to NODE_AUTH_TOKEN.
@@ -47,7 +59,7 @@ jobs:
       # (npm/cli#8544). It is ignored when OIDC is available, so it is safe to
       # leave in place — or drop it once every package is bootstrapped.
       - name: Publish packages
-        run: node scripts/publish.js
+        run: node scripts/publish.js ${{ inputs.dry_run && '--dry-run' || '' }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           # Provenance is documented as automatic under trusted publishing, but
