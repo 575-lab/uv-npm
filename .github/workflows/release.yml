@@ -6,6 +6,11 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      # Required for npm trusted publishing (OIDC). Without this the runner
+      # cannot mint an OIDC token and pnpm falls back to NODE_AUTH_TOKEN.
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v5
 
@@ -35,7 +40,17 @@ jobs:
       - name: Prepare platforms
         run: node scripts/prepare.js
 
+      # Auth comes from the OIDC token minted above; no npm token is needed
+      # once a trusted publisher is configured for all 8 packages. NODE_AUTH_TOKEN
+      # is kept only for the *initial* publish of a package that does not exist
+      # on npm yet, since a trusted publisher cannot be configured until then
+      # (npm/cli#8544). It is ignored when OIDC is available, so it is safe to
+      # leave in place — or drop it once every package is bootstrapped.
       - name: Publish packages
         run: node scripts/publish.js
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # Provenance is documented as automatic under trusted publishing, but
+          # pnpm has historically needed it stated explicitly. Set here rather
+          # than in publish.js so local --dry-run runs (no OIDC) still work.
+          NPM_CONFIG_PROVENANCE: "true"

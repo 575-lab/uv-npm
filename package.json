@@ -1,5 +1,5 @@
 {
-  "name": "@manzt/uv",
+  "name": "@dataiku/uv",
   "version": "0.12.0",
   "author": "Trevor Manz",
   "license": "MIT",
@@ -30,15 +30,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/manzt/manzt-uv.git"
+    "url": "git+https://github.com/575-lab/uv-npm.git"
   },
   "optionalDependencies": {
-    "@manzt/uv-darwin-x64": "0.12.0",
-    "@manzt/uv-darwin-arm64": "0.12.0",
-    "@manzt/uv-linux-x64": "0.12.0",
-    "@manzt/uv-linux-arm64": "0.12.0",
-    "@manzt/uv-win32-x64": "0.12.0",
-    "@manzt/uv-win32-ia32": "0.12.0",
-    "@manzt/uv-win32-arm64": "0.12.0"
+    "@dataiku/uv-darwin-x64": "0.12.0",
+    "@dataiku/uv-darwin-arm64": "0.12.0",
+    "@dataiku/uv-linux-x64": "0.12.0",
+    "@dataiku/uv-linux-arm64": "0.12.0",
+    "@dataiku/uv-win32-x64": "0.12.0",
+    "@dataiku/uv-win32-ia32": "0.12.0",
+    "@dataiku/uv-win32-arm64": "0.12.0"
   }
 }

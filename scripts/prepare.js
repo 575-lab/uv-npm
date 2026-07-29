@@ -120,7 +120,7 @@ async function preparePackage(pkg, { downloadDir, uvVersion }) {
           "engines": { "node": ">= 14" },
           "repository": {
             "type": "git",
-            "url": "git+https://github.com/manzt/manzt-uv.git",
+            "url": "git+https://github.com/575-lab/uv-npm.git",
           },
           "publishConfig": {
             "registry": "https://registry.npmjs.org/",
@@ -139,7 +139,7 @@ This is the **${
           ".zip",
           "",
         )
-      }** binary for @manzt/uv
+      }** binary for @dataiku/uv
 `,
     ),
   ]);
@@ -163,7 +163,7 @@ class Package {
     return `${this.platform}-${this.arch}`;
   }
   get name() {
-    return `@manzt/uv-${this.key}`;
+    return `@dataiku/uv-${this.key}`;
   }
   /**
    * @param {string} version

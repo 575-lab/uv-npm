@@ -1,6 +1,6 @@
-# @manzt/uv
+# @dataiku/uv
 
-[![npm version](https://img.shields.io/npm/v/%40manzt%2Fuv)](https://www.npmjs.com/package/@manzt/uv)
+[![npm version](https://img.shields.io/npm/v/%40dataiku%2Fuv)](https://www.npmjs.com/package/@dataiku/uv)
 
 This repo mirrors [uv](https://github.com/astral-sh/uv) GitHub releases to npm,
 letting you run Astral’s fast Python package manager via JavaScript package
@@ -11,7 +11,7 @@ managers — no install needed.
 Run `uv` via the npm CLI:
 
 ```sh
-npx @manzt/uv --help
+npx @dataiku/uv --help
 # An extremely fast Python package manager.
 #
 # Usage: uv [OPTIONS] <COMMAND>
@@ -21,10 +21,10 @@ Or with one of several other JavaScript package managers:
 
 ```bash
 # pnpm
-pnpx @manzt/uv --help # [pnpm docs](https://pnpm.io/cli/dlx)
+pnpx @dataiku/uv --help # [pnpm docs](https://pnpm.io/cli/dlx)
 
 # bun
-bunx @manzt/uv --help # [bun docs](https://bun.sh/docs/cli/bunx)
+bunx @dataiku/uv --help # [bun docs](https://bun.sh/docs/cli/bunx)
 ```
 
 See uv's [documentation](https://docs.astral.sh/uv/) and
@@ -33,10 +33,10 @@ See uv's [documentation](https://docs.astral.sh/uv/) and
 ### Example
 
 ```sh
-npx @manzt/uv init --script foo.py
-npx @manzt/uv add --script foo.py rich
+npx @dataiku/uv init --script foo.py
+npx @dataiku/uv add --script foo.py rich
 echo 'from rich import print; print("[bold green]Hello uv![/bold green]")' >> foo.py
-npx @manzt/uv run foo.py
+npx @dataiku/uv run foo.py
 ```
 
 ## Why?

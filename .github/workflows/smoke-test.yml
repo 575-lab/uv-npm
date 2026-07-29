@@ -19,4 +19,4 @@ jobs:
 
     steps:
       - name: Test npx installation
-        run: npx @manzt/uv@${{ github.event.inputs.version }} --help
+        run: npx @dataiku/uv@${{ github.event.inputs.version }} --help

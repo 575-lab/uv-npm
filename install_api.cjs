@@ -7,7 +7,7 @@ module.exports = {
     let binary = process.platform === "win32" ? "uv.exe" : "uv";
     let pkgPath = path.dirname(
       require.resolve(
-        `@manzt/uv-${process.platform}-${process.arch}/package.json`,
+        `@dataiku/uv-${process.platform}-${process.arch}/package.json`,
       ),
     );
     hardLinkOrCopy(
