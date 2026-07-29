@@ -32,12 +32,20 @@ jobs:
           version: 11
           run_install: false
 
+      # No registry-url on purpose. With it set, setup-node writes
+      # `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}` into .npmrc; now
+      # that NPM_TOKEN is gone that expands to an empty value, npm sees auth as
+      # "already configured" and never starts the OIDC exchange
+      # (actions/setup-node#1440). The registry is already pinned by
+      # publishConfig.registry in the root manifest and in every generated
+      # platform manifest, so nothing here needs to set it.
+      # v7 also drops the dummy NODE_AUTH_TOKEN export (actions/setup-node#1558);
+      # v5 still exports it.
       - name: Install Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: "pnpm"
-          registry-url: "https://registry.npmjs.org/"
 
       # The platform packages in optionalDependencies are published *by this
       # workflow*, so they cannot resolve yet: the lockfile can never be in
@@ -52,17 +60,16 @@ jobs:
       - name: Prepare platforms
         run: node scripts/prepare.js
 
-      # Auth comes from the OIDC token minted above; no npm token is needed
-      # once a trusted publisher is configured for all 8 packages. NODE_AUTH_TOKEN
-      # is kept only for the *initial* publish of a package that does not exist
-      # on npm yet, since a trusted publisher cannot be configured until then
-      # (npm/cli#8544). It is ignored when OIDC is available, so it is safe to
-      # leave in place — or drop it once every package is bootstrapped.
+      # Auth is the OIDC token minted from the id-token permission above; all 8
+      # packages have a trusted publisher configured, so no npm token exists or
+      # is referenced here. Do not reintroduce NODE_AUTH_TOKEN: setting it to a
+      # deleted secret yields an empty string, which suppresses the OIDC
+      # exchange rather than falling back to it.
       - name: Publish packages
         run: node scripts/publish.js ${{ inputs.dry_run && '--dry-run' || '' }}
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           # Provenance is documented as automatic under trusted publishing, but
-          # pnpm has historically needed it stated explicitly. Set here rather
-          # than in publish.js so local --dry-run runs (no OIDC) still work.
+          # the token-authenticated bootstrap publish of 0.12.0 produced no
+          # attestation, so it is stated explicitly. Set here rather than in
+          # publish.js so local --dry-run runs (no OIDC) still work.
           NPM_CONFIG_PROVENANCE: "true"
