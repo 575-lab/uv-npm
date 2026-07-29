@@ -3,7 +3,7 @@ import * as path from "node:path";
 import * as stream from "node:stream";
 import * as zlib from "node:zlib";
 
-import tar from "tar";
+import * as tar from "tar";
 import INFO from "../package.json" with { type: "json" };
 
 /**
@@ -83,7 +83,7 @@ async function preparePackage(pkg, { downloadDir, uvVersion }) {
   console.log(`Preparing ${pkg.name}...`);
   let packageDir = path.join(import.meta.dirname, "..", "platforms", pkg.key);
   let binDir = path.join(packageDir, "bin");
-  fs.promises.mkdir(binDir, { recursive: true });
+  await fs.promises.mkdir(binDir, { recursive: true });
 
   let binaryName = await downloadBinary(downloadDir, pkg, uvVersion);
   let extractedBinary;

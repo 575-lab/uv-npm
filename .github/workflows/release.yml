@@ -7,22 +7,30 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         name: Install pnpm
         with:
-          version: 10
+          version: 11
           run_install: false
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org/"
 
-      - run: pnpm install
+      # The platform packages in optionalDependencies are published *by this
+      # workflow*, so they cannot resolve yet: the lockfile can never be in
+      # sync (--frozen-lockfile is on by default in CI) and the root
+      # postinstall would fail trying to link a binary that does not exist.
+      # Only the devDependencies are needed to run prepare.js.
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Typecheck
+        run: pnpm check
 
       - name: Prepare platforms
         run: node scripts/prepare.js
